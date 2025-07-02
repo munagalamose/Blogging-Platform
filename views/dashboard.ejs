@@ -1,0 +1,160 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="user-profile card mb-4">
+        <div class="card-body text-center">
+          <div class="avatar mb-3">
+            <i class="fas fa-user-circle fa-4x text-primary"></i>
+          </div>
+          <h5 class="card-title mb-1"><%= user.name %></h5>
+          <p class="text-muted small mb-3"><%= user.email %></p>
+          <div class="stats d-flex justify-content-around mb-3">
+            <div class="stat">
+              <h6 class="mb-0"><%= typeof stats !== 'undefined' && stats ? stats.totalPosts : 0 %></h6>
+              <small class="text-muted">Posts</small>
+            </div>
+            <div class="stat">
+              <h6 class="mb-0"><%= typeof stats !== 'undefined' && stats ? stats.totalCategories : 0 %></h6>
+              <small class="text-muted">Categories</small>
+            </div>
+          </div>
+          <a href="/posts/new" class="btn btn-primary w-100">Create New Post</a>
+        </div>
+      </div>
+
+      <div class="categories-container card mb-4">
+        <div class="card-body">
+          <h6 class="categories-header">Your Categories</h6>
+          <div class="category-list">
+            <% if (categories && categories.length > 0) { %>
+              <% categories.forEach(category => { %>
+                <a href="/posts?category=<%= category.slug %>&myPosts=true" class="category-item">
+                  <%= category.name %>
+                  <span class="badge bg-primary rounded-pill"><%= category.postCount %></span>
+                </a>
+              <% }) %>
+            <% } else { %>
+              <p class="text-muted small mb-0">No categories found</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Your Recent Posts</h5>
+          <% if (userPosts && userPosts.length > 0) { %>
+            <div class="post-list">
+              <% userPosts.forEach(post => { %>
+                <div class="post-item">
+                  <h6 class="mb-1">
+                    <a href="/posts/<%= post._id %>" class="text-decoration-none"><%= post.title %></a>
+                  </h6>
+                  <div class="post-meta">
+                    <small class="text-muted">
+                      <%= new Date(post.createdAt).toLocaleDateString() %> in 
+                      <a href="/posts?category=<%= post.category.slug %>&myPosts=true" class="text-decoration-none">
+                        <%= post.category.name %>
+                      </a>
+                    </small>
+                  </div>
+                  <div class="post-actions mt-2">
+                    <a href="/posts/<%= post._id %>/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <form action="/posts/<%= post._id %>?_method=DELETE" method="POST" class="d-inline">
+                      <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4">
+              <p class="text-muted mb-3">You haven't created any posts yet</p>
+              <a href="/posts/new" class="btn btn-primary">Create Your First Post</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.user-profile {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats {
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 0;
+  margin: 1rem -1.25rem;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #2c3e50;
+  transition: all 0.2s ease;
+}
+
+.category-item:hover {
+  background-color: #f8f9fa;
+  color: #4285f4;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.post-item {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.post-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.post-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .stats {
+    margin: 1rem -1rem;
+  }
+}
+</style>
+
+<%- include('partials/footer') %> 

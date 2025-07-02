@@ -1,0 +1,292 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Categories</h5>
+        </div>
+        <div class="list-group list-group-flush">
+          <a href="/posts" class="list-group-item list-group-item-action <%= typeof selectedCategory === 'undefined' || !selectedCategory ? 'active' : '' %>">
+            All Posts
+          </a>
+          <% if (typeof categories !== 'undefined' && categories && categories.length > 0) { %>
+            <% categories.forEach(category => { %>
+              <a 
+                href="/posts?category=<%= category.slug %>" 
+                class="list-group-item list-group-item-action <%= typeof selectedCategory !== 'undefined' && selectedCategory && selectedCategory._id.toString() === category._id.toString() ? 'active' : '' %>"
+              >
+                <%= category.name %>
+              </a>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+          <%= typeof selectedCategory !== 'undefined' && selectedCategory ? selectedCategory.name + ' Posts' : (typeof myPosts !== 'undefined' && myPosts ? 'My Posts' : 'All Posts') %>
+        </h1>
+        <div class="d-flex gap-2">
+          <% if (typeof user !== 'undefined' && user) { %>
+            <a href="/posts/new" class="btn btn-primary">Create New Post</a>
+            <% if (typeof myPosts === 'undefined' || !myPosts) { %>
+              <a href="/posts?myPosts=true" class="btn btn-outline-primary">View My Posts</a>
+            <% } else { %>
+              <a href="/posts" class="btn btn-outline-secondary">View All Posts</a>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Search Form -->
+      <form action="/posts" method="GET" class="mb-4">
+        <div class="input-group">
+          <input 
+            type="text" 
+            name="search" 
+            class="form-control" 
+            placeholder="Search posts by title or content..."
+            value="<%= typeof search !== 'undefined' ? search : '' %>"
+          >
+          <% if (typeof selectedCategory !== 'undefined' && selectedCategory) { %>
+            <input type="hidden" name="category" value="<%= selectedCategory.slug %>">
+          <% } %>
+          <% if (typeof myPosts !== 'undefined' && myPosts) { %>
+            <input type="hidden" name="myPosts" value="true">
+          <% } %>
+          <button class="btn btn-outline-secondary" type="submit">Search</button>
+          <% if ((typeof search !== 'undefined' && search) || (typeof selectedCategory !== 'undefined' && selectedCategory) || (typeof myPosts !== 'undefined' && myPosts)) { %>
+            <a href="/posts" class="btn btn-outline-secondary">Clear All</a>
+          <% } %>
+        </div>
+      </form>
+
+      <% if (typeof posts !== 'undefined' && posts && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <% if (post.image) { %>
+                  <div class="col-md-3">
+                    <img src="<%= post.image %>" class="img-fluid rounded" alt="Post thumbnail">
+                  </div>
+                <% } %>
+                <div class="<%= post.image ? 'col-md-9' : 'col-md-12' %>">
+                  <h2 class="card-title h4">
+                    <a href="/posts/<%= post._id %>" class="text-decoration-none"><%= post.title %></a>
+                  </h2>
+                  <div class="text-muted mb-2">
+                    <small>
+                      Posted by <%= post.author.name %> 
+                      <% if (typeof user !== 'undefined' && user && post.author._id.toString() === user._id.toString()) { %>
+                        <span class="badge bg-primary">You</span>
+                      <% } %>
+                      on <%= new Date(post.createdAt).toLocaleDateString() %>
+                      <% if (post.category) { %>
+                        in <a href="/posts?category=<%= post.category.slug %>" class="text-decoration-none"><%= post.category.name %></a>
+                      <% } %>
+                    </small>
+                  </div>
+                  <p class="card-text">
+                    <%= post.content.length > 200 ? post.content.substring(0, 200) + '...' : post.content %>
+                  </p>
+                  <a href="/posts/<%= post._id %>" class="btn btn-outline-primary">Read More</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="alert alert-info">
+          <% if (typeof search !== 'undefined' && search) { %>
+            No posts found matching "<%= search %>" <%= typeof selectedCategory !== 'undefined' && selectedCategory ? `in ${selectedCategory.name}` : '' %>. 
+            <a href="<%= typeof selectedCategory !== 'undefined' && selectedCategory ? `/posts?category=${selectedCategory.slug}` : '/posts' %>">View all <%= typeof selectedCategory !== 'undefined' && selectedCategory ? selectedCategory.name + ' posts' : 'posts' %></a>
+          <% } else { %>
+            No posts found <%= typeof selectedCategory !== 'undefined' && selectedCategory ? `in ${selectedCategory.name}` : '' %>. 
+            <% if (typeof user !== 'undefined' && user) { %>Why not <a href="/posts/new">create one</a>?<% } %>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<style>
+:root {
+  --primary-color: #4285f4;
+  --primary-hover: #357abd;
+  --background-light: #f8f9fa;
+  --text-dark: #2c3e50;
+  --text-muted: #6c757d;
+  --border-color: #e9ecef;
+  --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+body {
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.list-group-item {
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  color: var(--text-dark);
+  transition: all 0.2s ease;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.list-group-item:hover:not(.active) {
+  background-color: var(--background-light);
+  color: var(--primary-color);
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.search-form {
+  margin-bottom: 2rem;
+}
+
+.search-form .input-group {
+  box-shadow: var(--card-shadow);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-form input {
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+}
+
+.search-form .btn {
+  padding: 0.75rem 1.5rem;
+}
+
+.post-card {
+  margin-bottom: 1.5rem;
+}
+
+.post-card .card-title {
+  margin-bottom: 0.75rem;
+}
+
+.post-card .card-title a {
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+.post-card .card-title a:hover {
+  color: var(--primary-color);
+}
+
+.post-meta {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.post-meta a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.post-meta a:hover {
+  text-decoration: underline;
+}
+
+.post-content {
+  color: var(--text-dark);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .post-card .row {
+    flex-direction: column;
+  }
+  
+  .post-card .col-md-3 {
+    margin-bottom: 1rem;
+  }
+}
+</style>
+
+<%- include('../partials/footer') %> 

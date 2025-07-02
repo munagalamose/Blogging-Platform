@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Blog Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <h1 class="display-4 mb-4">Welcome to  Blog Platform</h1>
+                <p class="lead mb-4">Create, share, and discover amazing blog posts</p>
+                
+                <div class="d-grid gap-3">
+                    <% if (!user) { %>
+                        <a href="/users/login" class="btn btn-primary btn-lg">Login</a>
+                        <a href="/users/register" class="btn btn-outline-primary btn-lg">Register</a>
+                    <% } else { %>
+                        <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .btn-primary {
+        background-color: #4285f4;
+        border-color: #4285f4;
+    }
+
+    .btn-primary:hover {
+        background-color: #357abd;
+        border-color: #357abd;
+    }
+
+    .btn-outline-primary {
+        color: #4285f4;
+        border-color: #4285f4;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #4285f4;
+        border-color: #4285f4;
+    }
+    </style>
+
+    <%- include('partials/footer') %>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Fetch latest posts
+    async function fetchLatestPosts() {
+        try {
+            const response = await fetch('/posts');
+            const posts = await response.json();
+            const latestPostsContainer = document.getElementById('latest-posts');
+            
+            if (posts.length > 0) {
+                posts.slice(0, 3).forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'col-md-4';
+                    postElement.innerHTML = `
+                        <div class="card h-100">
+                            ${post.image ? `<img src="${post.image}" class="card-img-top" alt="Post image">` : ''}
+                            <div class="card-body">
+                                <h5 class="card-title">${post.title}</h5>
+                                <p class="card-text">${post.content.substring(0, 100)}...</p>
+                                <a href="/posts/${post._id}" class="btn btn-outline-primary">Read More</a>
+                            </div>
+                        </div>
+                    `;
+                    latestPostsContainer.appendChild(postElement);
+                });
+            } else {
+                latestPostsContainer.innerHTML = `
+                    <div class="col-12 text-center">
+                        <p class="text-muted">No posts yet. Be the first to share your story!</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
+
+    // Load latest posts when the page loads
+    document.addEventListener('DOMContentLoaded', fetchLatestPosts);
+    </script>
+</body>
+</html> 

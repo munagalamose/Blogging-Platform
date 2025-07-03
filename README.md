@@ -2,8 +2,12 @@
 
 ![image alt](https://github.com/munagalamose/Blogging-Platform/blob/d05d40721a9fee7af725224d56d3f0c93f1cb3ae/Screenshot%202025-07-02%20211346.png)
 
-![image alt](https://github.com/munagalamose/Blogging-Platform/blob/8b42f618d12d66beaa87ef12c07dbfdc47fb3d91/Screenshot%202025-07-03%20062908.png
-)
+![image alt](https://github.com/munagalamose/Blogging-Platform/blob/8b42f618d12d66beaa87ef12c07dbfdc47fb3d91/Screenshot%202025-07-03%20062908.png)
+
+![image alt](https://github.com/munagalamose/Blogging-Platform/blob/7966515a08bfbf7e72e4c717b3d19ed524c7c0f1/Screenshot%202025-07-03%20063147.png)
+
+
+https://github.com/munagalamose/Blogging-Platform/blob/7966515a08bfbf7e72e4c717b3d19ed524c7c0f1/Screenshot%202025-07-03%20063147.png
 
 
 

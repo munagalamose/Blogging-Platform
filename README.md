@@ -7,7 +7,6 @@
 ![image alt](https://github.com/munagalamose/Blogging-Platform/blob/7966515a08bfbf7e72e4c717b3d19ed524c7c0f1/Screenshot%202025-07-03%20063147.png)
 
 
-https://github.com/munagalamose/Blogging-Platform/blob/7966515a08bfbf7e72e4c717b3d19ed524c7c0f1/Screenshot%202025-07-03%20063147.png
 
 
 

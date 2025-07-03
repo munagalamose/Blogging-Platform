@@ -2,6 +2,11 @@
 
 ![image alt](https://github.com/munagalamose/Blogging-Platform/blob/d05d40721a9fee7af725224d56d3f0c93f1cb3ae/Screenshot%202025-07-02%20211346.png)
 
+![image alt](https://github.com/munagalamose/Blogging-Platform/blob/8b42f618d12d66beaa87ef12c07dbfdc47fb3d91/Screenshot%202025-07-03%20062908.png
+)
+
+
+
 
 A full-stack blog platform built with Node.js, Express, and MongoDB that allows users to sign up, log in, and manage their blog posts. Features include blog post creation, editing, and deletion, categorization using tags, search functionality, and a responsive design.
 

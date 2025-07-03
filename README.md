@@ -1,5 +1,8 @@
 # 📝 Blog Platform
 
+![image alt](https://github.com/munagalamose/flam-assginment/blob/01a3911d0dfb4dc39108d870b9e4101369791059/Screenshot%202025-06-05%20103125.png)
+
+
 A full-stack blog platform built with Node.js, Express, and MongoDB that allows users to sign up, log in, and manage their blog posts. Features include blog post creation, editing, and deletion, categorization using tags, search functionality, and a responsive design.
 
 ## 🚀 Features

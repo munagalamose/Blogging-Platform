@@ -133,7 +133,7 @@ MongoDB Guide
 Passport Auth Simplified
 
 ### 🧑‍💻 Author
-Your Name
+munagala mose
 
 ### 📝 License
 This project is open-source and available under the MIT License.

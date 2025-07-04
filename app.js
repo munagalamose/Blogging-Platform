@@ -14,21 +14,22 @@ const app = express();
 require('./config/passport')(passport);
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/elegant-blog')
-  .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+console.log('🔍 Connecting to MongoDB Atlas...');
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅ MongoDB Connected to Atlas'))
+  .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // EJS
 app.set('view engine', 'ejs');
 
-// Express body parser
+// Body Parser Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Method Override
 app.use(methodOverride('_method'));
 
-// Static Files
+// Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
@@ -36,22 +37,22 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'secret',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ 
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/elegant-blog'
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
   }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 // 1 day
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
   }
 }));
 
-// Passport middleware
+// Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Connect flash
+// Flash Messages
 app.use(flash());
 
-// Global variables
+// Global Template Variables
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
@@ -66,30 +67,28 @@ app.use('/users', require('./routes/users'));
 app.use('/posts', require('./routes/posts'));
 app.use('/categories', require('./routes/categories'));
 
+// Server Startup
 const PORT = process.env.PORT || 3000;
 
 const startServer = async (port) => {
   try {
-    await new Promise((resolve, reject) => {
-      const server = app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-        resolve();
-      });
-      
-      server.on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          console.log(`Port ${port} is busy, trying ${port + 1}...`);
-          server.close();
-          startServer(port + 1);
-        } else {
-          reject(err);
-        }
-      });
+    const server = app.listen(port, () => {
+      console.log(`🚀 Server running on port ${port}`);
+    });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`⚠️ Port ${port} is in use, trying ${port + 1}...`);
+        startServer(port + 1);
+      } else {
+        console.error('❌ Failed to start server:', err);
+        process.exit(1);
+      }
     });
   } catch (err) {
-    console.error('Failed to start server:', err);
+    console.error('❌ Unexpected error:', err);
     process.exit(1);
   }
 };
 
-startServer(PORT); 
+startServer(PORT);

@@ -12,6 +12,7 @@
 
 
 A full-stack blog platform built with Node.js, Express, and MongoDB that allows users to sign up, log in, and manage their blog posts. Features include blog post creation, editing, and deletion, categorization using tags, search functionality, and a responsive design.
+🌐 Live App: https://bloggingplatform-j98h.onrender.com/
 
 ## 🚀 Features
 
